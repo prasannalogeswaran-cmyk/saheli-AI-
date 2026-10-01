@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>அக்கா - Saheli AI Vibrant e-Seva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Outfit', 'Mukta Malar', sans-serif;
+    }
+    /* Animated glowing pulse for microphone */
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 24px rgba(249, 115, 22, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+    }
+    .pulse-ring {
+      animation: pulseRing 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+    }
+    /* Gradient animated border */
+    .rainbow-border {
+      background: linear-gradient(135deg, #f97316, #ec4899, #8b5cf6, #06b6d4);
+      padding: 3px;
+      border-radius: 1.75rem;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-amber-100 via-orange-50 to-pink-100 min-h-screen flex flex-col items-center justify-between p-3 sm:p-5 text-slate-800 selection:bg-orange-500 selection:text-white">
+
+  <!-- Floating Ambient Blur Orbs -->
+  <div class="fixed top-10 left-6 w-48 h-48 bg-orange-400/25 rounded-full filter blur-3xl pointer-events-none"></div>
+  <div class="fixed bottom-12 right-6 w-56 h-56 bg-pink-400/25 rounded-full filter blur-3xl pointer-events-none"></div>
+
+  <!-- Header Banner -->
+  <header class="w-full max-w-lg bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 text-white rounded-3xl shadow-xl shadow-orange-500/20 p-4 border border-white/20 backdrop-blur-md relative overflow-hidden">
+    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+    <div class="flex items-center justify-between relative z-10">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-white/30">
+          🌸
+        </div>
+        <div class="text-left">
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl sm:text-2xl font-black tracking-wide drop-shadow-sm">அக்கா (Saheli AI)</h1>
+            <span class="bg-amber-300 text-amber-950 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm">குரல் வழி</span>
+          </div>
+          <p class="text-xs text-orange-100 font-medium">மகளிர் நலத்திட்ட தானியங்கி வழிகாட்டி</p>
+        </div>
+      </div>
+      <button id="langToggleBtn" class="bg-white/20 hover:bg-white/30 active:scale-95 transition-all px-3 py-1.5 rounded-2xl text-xs font-bold border border-white/30 backdrop-blur-md shadow-sm">
+        English/Tanglish
+      </button>
+    </div>
+  </header>
+
+  <!-- Central Interaction Hub -->
+  <main class="w-full max-w-lg my-auto flex flex-col items-center gap-4 py-3 relative z-10">
+    
+    <!-- Vibrant Scheme Selector Chips -->
+    <div class="w-full bg-white/80 backdrop-blur-lg border border-orange-200/80 rounded-3xl p-3.5 shadow-lg shadow-orange-500/5">
+      <div class="flex items-center justify-between mb-2.5 px-1">
+        <span class="text-[11px] font-extrabold text-orange-800 uppercase tracking-wider flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
+          திட்டத்தைத் தேர்வு செய்யவும்
+        </span>
+        <span class="text-[10px] font-bold text-slate-400">Scheme Directory</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="selectScheme('ujjwala')" id="btn-ujjwala" class="scheme-btn p-2.5 rounded-2xl text-xs font-bold border-2 border-orange-500 bg-gradient-to-b from-orange-50 to-orange-100/70 text-orange-800 text-center shadow-md shadow-orange-500/10 transition-all hover:scale-[1.02] active:scale-95">
+          <div class="text-lg mb-0.5">🔥</div>
+          <span>PM உஜ்வாலா</span>
+          <span class="block text-[9px] font-medium text-orange-600/90 mt-0.5">கேஸ் சிலிண்டர்</span>
+        </button>
+        <button onclick="selectScheme('magalir')" id="btn-magalir" class="scheme-btn p-2.5 rounded-2xl text-xs font-bold border-2 border-slate-200/80 bg-white/70 text-slate-700 text-center transition-all hover:scale-[1.02] active:scale-95">
+          <div class="text-lg mb-0.5">💎</div>
+          <span>மகளிர் உரிமை</span>
+          <span class="block text-[9px] font-medium text-slate-500 mt-0.5">மாதம் ₹1,000</span>
+        </button>
+        <button onclick="selectScheme('awas')" id="btn-awas" class="scheme-btn p-2.5 rounded-2xl text-xs font-bold border-2 border-slate-200/80 bg-white/70 text-slate-700 text-center transition-all hover:scale-[1.02] active:scale-95">
+          <div class="text-lg mb-0.5">🏡</div>
+          <span>PM ஆவாஸ்</span>
+          <span class="block text-[9px] font-medium text-slate-500 mt-0.5">வீட்டு மானியம்</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Assistant Spoken Speech Card (Glassmorphism) -->
+    <div class="w-full rainbow-border shadow-xl shadow-orange-500/10">
+      <div id="statusCard" class="w-full bg-white/95 backdrop-blur-xl rounded-[1.6rem] p-5 text-center min-h-[150px] flex flex-col items-center justify-center relative">
+        <div id="assistantSpeech" class="text-base sm:text-lg font-semibold leading-relaxed text-slate-800">
+          வணக்கம் அக்கா! நான் உங்களுக்கு அரசு திட்டங்களின் தகுதியை சரிபார்க்க உதவுகிறேன். கீழே இருக்கும் ஆரஞ்சு பொத்தானை அழுத்திப் பேசுங்கள்.
+        </div>
+
+        <!-- Listening wave indicator -->
+        <div id="listeningIndicator" class="hidden mt-3 items-center gap-2 px-3 py-1 bg-rose-50 border border-rose-200 rounded-full text-rose-600 font-bold text-xs animate-bounce">
+          <span class="w-2.5 h-2.5 bg-rose-600 rounded-full animate-ping"></span>
+          அக்கா கேட்கிறேன்... பேசுங்கள் (Listening...)
+        </div>
+
+        <!-- Audio Replay Button -->
+        <button id="replayBtn" title="மீண்டும் கேட்க (Audio Repeat)" class="absolute top-3 right-3 text-slate-400 hover:text-orange-600 p-2 rounded-2xl hover:bg-orange-50 active:scale-90 transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- User Spoken Text Echo Badge -->
+    <div id="userEcho" class="text-xs font-semibold text-orange-950/70 bg-orange-200/50 backdrop-blur-sm px-4 py-1.5 rounded-full border border-orange-300/40 min-h-[28px] flex items-center justify-center">
+      குரல் தயாராக உள்ளது (Tap mic to speak)
+    </div>
+
+    <!-- Eligibility Success Card -->
+    <div id="successCard" class="hidden w-full bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100 border-2 border-emerald-400 rounded-3xl p-5 shadow-2xl shadow-emerald-500/20">
+      <div class="text-center mb-3">
+        <span class="inline-block text-4xl p-2 bg-emerald-100 rounded-2xl border border-emerald-300 shadow-sm animate-bounce">🎉</span>
+        <h2 class="text-lg font-black text-emerald-900 mt-2">நீங்கள் தகுதியுடையவர்! (Eligible)</h2>
+        <p class="text-xs font-semibold text-emerald-700">தேவையான ஆவணங்கள் சரிபார்க்கப்பட்டு தயார்:</p>
+      </div>
+      <ul id="documentList" class="space-y-2 text-emerald-950 font-semibold text-xs mb-4"></ul>
+      
+      <!-- Auto Apply Button -->
+      <button onclick="startAutoESeva()" id="autoApplyBtn" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-2xl font-extrabold text-sm shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 transform active:scale-95 transition-all">
+        <span class="text-lg">⚡</span> தானியங்கி இ-சேவை பதிவு தொடங்கு (Auto Apply via e-Seva)
+      </button>
+    </div>
+
+    <!-- Auto e-Seva Processing Card -->
+    <div id="processingCard" class="hidden w-full bg-gradient-to-br from-blue-50 via-indigo-50 to-sky-50 border-2 border-blue-400 rounded-3xl p-5 shadow-2xl shadow-blue-500/20 text-center">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <div class="w-3 h-3 bg-blue-600 rounded-full animate-ping"></div>
+        <h3 class="font-extrabold text-blue-950 text-sm">அரசு இ-சேவை போர்டல் தானியங்கி இணைப்பு...</h3>
+      </div>
+      <div class="space-y-2.5 text-xs text-left mt-3">
+        <div id="procStep1" class="flex items-center gap-2.5 text-slate-400 transition-colors">
+          <span class="step-dot w-2.5 h-2.5 rounded-full bg-slate-300"></span> 1. ஆவணங்கள் ஸ்கேன் செய்யப்படுகிறது (Scanning Docs)...
+        </div>
+        <div id="procStep2" class="flex items-center gap-2.5 text-slate-400 transition-colors">
+          <span class="step-dot w-2.5 h-2.5 rounded-full bg-slate-300"></span> 2. ஆதார் e-KYC சரிபார்க்கப்படுகிறது (Aadhaar KYC)...
+        </div>
+        <div id="procStep3" class="flex items-center gap-2.5 text-slate-400 transition-colors">
+          <span class="step-dot w-2.5 h-2.5 rounded-full bg-slate-300"></span> 3. அரசு போர்ட்டலில் படிவம் சமர்ப்பிக்கப்படுகிறது...
+        </div>
+      </div>
+      <div class="w-full bg-blue-200/60 rounded-full h-3 mt-4 overflow-hidden p-0.5 border border-blue-300">
+        <div id="progressBar" class="bg-gradient-to-r from-blue-600 to-indigo-600 h-full rounded-full w-0 transition-all duration-700 shadow-sm"></div>
+      </div>
+    </div>
+
+    <!-- Final Digital Government Receipt -->
+    <div id="receiptCard" class="hidden w-full bg-white border-2 border-emerald-500 rounded-3xl p-5 shadow-2xl shadow-emerald-500/20 relative overflow-hidden">
+      <div class="absolute -right-10 -top-10 w-28 h-28 bg-emerald-200/40 rounded-full blur-2xl"></div>
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3 relative z-10">
+        <div class="text-left">
+          <span class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">வெற்றி பெற்றது (Submitted)</span>
+          <h4 class="font-black text-slate-900 text-sm mt-1">தமிழ்நாடு அரசு இ-சேவை ரசீது</h4>
+        </div>
+        <div class="text-right">
+          <p class="text-[10px] font-bold text-slate-400">விண்ணப்ப எண் (Token)</p>
+          <p class="font-mono font-extrabold text-sm text-orange-600 tracking-wider">TN-ES-892419</p>
+        </div>
+      </div>
+      <div class="space-y-2 text-xs text-slate-700 relative z-10 text-left">
+        <div class="flex justify-between bg-slate-50 p-2 rounded-xl">
+          <span class="text-slate-500 font-medium">பயனாளி பெயர்:</span>
+          <span class="font-bold text-slate-900">ஆர். பானுபிரியா</span>
+        </div>
+        <div class="flex justify-between bg-slate-50 p-2 rounded-xl">
+          <span class="text-slate-500 font-medium">திட்டம்:</span>
+          <span class="font-bold text-slate-900">PM உஜ்வாலா 2.0 (இலவச சிலிண்டர்)</span>
+        </div>
+        <div class="flex justify-between bg-slate-50 p-2 rounded-xl">
+          <span class="text-slate-500 font-medium">நிலை:</span>
+          <span class="font-bold text-emerald-600">சரிபார்க்கப்பட்டு அனுப்பப்பட்டது (Verified)</span>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center relative z-10">
+        <span class="text-[11px] text-emerald-800 font-bold flex items-center gap-1">
+          <span>📲</span> SMS அனுப்பப்பட்டது
+        </span>
+        <button onclick="window.print()" class="text-xs bg-slate-800 hover:bg-black text-white px-3.5 py-1.5 rounded-xl font-bold active:scale-95 transition-all shadow-md">
+          🖨️ பிரிண்ட் (Print)
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Vibrant Voice Control Footer -->
+  <footer class="w-full max-w-lg flex flex-col items-center gap-3 pb-3 relative z-10">
+    <div class="flex items-center gap-6">
+      
+      <!-- Restart / Reset Button -->
+      <button id="resetBtn" title="மீண்டும் தொடங்க (Restart)" class="w-13 h-13 p-3 bg-white/90 hover:bg-white text-slate-700 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/10 border border-orange-200 active:scale-90 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+      </button>
+
+      <!-- Glowing Orange/Rose Mic Button with Pulsing Rings -->
+      <button id="micBtn" class="pulse-ring w-24 h-24 bg-gradient-to-tr from-orange-600 via-amber-500 to-rose-500 hover:from-orange-700 hover:to-rose-600 active:scale-90 text-white rounded-full shadow-2xl shadow-orange-600/50 flex flex-col items-center justify-center border-4 border-white transition-all transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-0.5 filter drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        </svg>
+        <span class="text-[11px] font-black tracking-wide drop-shadow">பேசுங்கள்</span>
+      </button>
+
+      <!-- Balanced right spacer -->
+      <div class="w-13"></div>
+    </div>
+    <p class="text-[11px] font-bold text-orange-950/70 tracking-wide text-center">
+      ஆரஞ்சு பொத்தானை ஒருமுறை தொட்டுவிட்டு குரலில் பதிலளிக்கவும்
+    </p>
+  </footer>
+
+  <script>
+    let activeScheme = 'ujjwala';
+    let isTanglish = false;
+    let step = 0;
+
+    const SCHEME_DATA = {
+      ujjwala: {
+        docs: [
+          { icon: "🆔", name: "ஆதார் அட்டை (Aadhaar Card)" },
+          { icon: "🌾", name: "குடும்ப அட்டை (Ration Card)" },
+          { icon: "🏦", name: "வங்கி பாஸ்புக் (Bank Passbook)" }
+        ],
+        ta: [
+          "வணக்கம் அம்மா! உங்களுக்கு 18 வயசு பூர்த்தியாகிடுச்சா?",
+          "ரொம்ப நல்லது. உங்க வீட்ல ஏற்கனவே யாருடைய பேரிலாவது கேஸ் சிலிண்டர் இணைப்பு இருக்கா?",
+          "சரிங்க அக்கா. உங்க குடும்பத்துல ரேஷன் அட்டை இருக்கா?",
+          "அற்புதம் அக்கா! உங்களுக்கு இலவச கேஸ் சிலிண்டர் இணைப்பு பெற முழு தகுதி இருக்கு. 'தானியங்கி பதிவு' பொத்தானை அழுத்தி விண்ணப்பிக்கலாம்!"
+        ],
+        tanglish: [
+          "Vanakkam amma! Ungalukku 18 vayasu poorthi aagiducha?",
+          "Romba nalladhu. Unga veetla yaar peraavadhu gas connection irukka?",
+          "Saringa akka. Unga kudumbathula ration card irukka?",
+          "Super akka! Ungalukku ilavasa gas connection kedaikka muzhu thagudhi irukku. Auto Apply button azhuthi apply pannalaam!"
+        ]
+      },
+      magalir: {
+        docs: [
+          { icon: "🌾", name: "PHH குடும்ப அட்டை" },
+          { icon: "🆔", name: "ஆதார் அட்டை" },
+          { icon: "⚡", name: "மின்சார ரசீது" }
+        ],
+        ta: [
+          "வணக்கம் அம்மா! உங்கள் வயது 21 பூர்த்தியாகிவிட்டதா?",
+          "குடும்ப ஆண்டு வருமானம் இரண்டரை லட்சத்திற்குள் உள்ளதா?",
+          "வீட்டில் கார் போன்ற நான்கு சக்கர வாகனம் இல்லையா?",
+          "வாழ்த்துகள் அக்கா! மகளிர் உரிமை தொகை மாதம் ₹1000 பெற நீங்கள் தகுதியுடையவர்!"
+        ],
+        tanglish: [
+          "Vanakkam amma! Ungalukku 21 vayasu poorthi aagiducha?",
+          "Unga kudumba aandu varumaanam rendu-ra latchathukkul irukka?",
+          "Veetla car madhiri four wheeler ethuvum illaiya?",
+          "Vaazhthukkal akka! Magalir Urimai Thogai maatham aayiram roobai pera thagudhi irukku!"
+        ]
+      },
+      awas: {
+        docs: [
+          { icon: "🆔", name: "ஆதார் அட்டை" },
+          { icon: "🌾", name: "BPL குடும்ப அட்டை" },
+          { icon: "📑", name: "சொந்த நில பட்டா" }
+        ],
+        ta: [
+          "வணக்கம் அம்மா! சொந்தமாக கான்கிரீட் வீடு எதுவும் இல்லையா?",
+          "சொந்தமாக வீடு கட்ட இடம் அல்லது நிலப் பட்டா உள்ளதா?",
+          "முன்பு எந்த அரசு வீட்டு திட்டத்திலும் பலன் பெறவில்லையா?",
+          "மகிழ்ச்சி அக்கா! PM ஆவாஸ் யோஜனா திட்டத்தின் கீழ் வீடு கட்ட நிதி பெற தகுதியுடையவர்!"
+        ],
+        tanglish: [
+          "Vanakkam amma! Sondhama concrete veedu edhuvum illaiya?",
+          "Sondhamana veedu katta idham patta irukka?",
+          "Munnadi entha veetu thittathilum payan peravillaiya?",
+          "Magizhchi akka! PM Awas Yojana thittathil veedu katta thagudhi irukku!"
+        ]
+      }
+    };
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ta-IN';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        document.getElementById('listeningIndicator').classList.remove('hidden');
+        document.getElementById('listeningIndicator').classList.add('flex');
+      };
+
+      recognition.onresult = (event) => {
+        const spoken = event.results[0][0].transcript;
+        document.getElementById('userEcho').textContent = `நீங்கள்: "${spoken}"`;
+        document.getElementById('listeningIndicator').classList.remove('flex');
+        document.getElementById('listeningIndicator').classList.add('hidden');
+        advanceFlow();
+      };
+
+      recognition.onerror = () => {
+        document.getElementById('listeningIndicator').classList.remove('flex');
+        document.getElementById('listeningIndicator').classList.add('hidden');
+      };
+    }
+
+    function selectScheme(key) {
+      activeScheme = key;
+      document.querySelectorAll('.scheme-btn').forEach(btn => {
+        btn.classList.remove('border-orange-500', 'bg-gradient-to-b', 'from-orange-50', 'to-orange-100/70', 'text-orange-800', 'shadow-md');
+        btn.classList.add('border-slate-200/80', 'bg-white/70', 'text-slate-700');
+      });
+      const activeBtn = document.getElementById(`btn-${key}`);
+      activeBtn.classList.remove('border-slate-200/80', 'bg-white/70', 'text-slate-700');
+      activeBtn.classList.add('border-orange-500', 'bg-gradient-to-b', 'from-orange-50', 'to-orange-100/70', 'text-orange-800', 'shadow-md');
+      resetAll();
+    }
+
+    function advanceFlow() {
+      const scheme = SCHEME_DATA[activeScheme];
+      const list = isTanglish ? scheme.tanglish : scheme.ta;
+      const assistantTextElem = document.getElementById('assistantSpeech');
+
+      if (step < list.length) {
+        const reply = list[step];
+        assistantTextElem.textContent = reply;
+        speakOut(reply);
+
+        if (step === list.length - 1) {
+          showEligible(scheme.docs);
+        }
+        step++;
+      }
+    }
+
+    function showEligible(docs) {
+      const card = document.getElementById('successCard');
+      const docList = document.getElementById('documentList');
+      docList.innerHTML = '';
+      docs.forEach(doc => {
+        const li = document.createElement('li');
+        li.className = "flex items-center gap-3 bg-white/90 backdrop-blur-sm p-2.5 rounded-2xl border border-emerald-300 shadow-sm";
+        li.innerHTML = `<span class="text-xl p-1 bg-emerald-50 rounded-xl">${doc.icon}</span><span class="text-xs font-bold text-emerald-950">${doc.name}</span>`;
+        docList.appendChild(li);
+      });
+      card.classList.remove('hidden');
+    }
+
+    // AUTOMATED E-SEVA PROCESSOR
+    function startAutoESeva() {
+      document.getElementById('successCard').classList.add('hidden');
+      document.getElementById('processingCard').classList.remove('hidden');
+      const pBar = document.getElementById('progressBar');
+
+      speakOut(isTanglish ? "Ungal aavanangal e-Seva moolam thaanaga samarpikkapadugiradhu..." : "உங்கள் ஆவணங்கள் இ-சேவை போர்டலில் தானாக சமர்ப்பிக்கப்படுகிறது...");
+
+      setTimeout(() => {
+        pBar.style.width = "35%";
+        document.getElementById('procStep1').className = "flex items-center gap-2.5 text-blue-600 font-bold";
+      }, 1000);
+
+      setTimeout(() => {
+        pBar.style.width = "75%";
+        document.getElementById('procStep2').className = "flex items-center gap-2.5 text-blue-600 font-bold";
+      }, 2500);
+
+      setTimeout(() => {
+        pBar.style.width = "100%";
+        document.getElementById('procStep3').className = "flex items-center gap-2.5 text-emerald-600 font-bold";
+
+        setTimeout(() => {
+          document.getElementById('processingCard').classList.add('hidden');
+          document.getElementById('receiptCard').classList.remove('hidden');
+          const finalMsg = isTanglish 
+            ? "Vaazhthukkal! Ungal vinnappam e-Seva vazhiyaaga vetrigaramaaga pathivu seiyappattadhu. Token number SMS anuppappattadhu!" 
+            : "வாழ்த்துகள்! உங்கள் விண்ணப்பம் இ-சேவை வழியாக வெற்றிகரமாக பதிவு செய்யப்பட்டது. ரசீது தயார்!";
+          document.getElementById('assistantSpeech').textContent = finalMsg;
+          speakOut(finalMsg);
+        }, 1200);
+      }, 4200);
+    }
+
+    function resetAll() {
+      step = 0;
+      document.getElementById('successCard').classList.add('hidden');
+      document.getElementById('processingCard').classList.add('hidden');
+      document.getElementById('receiptCard').classList.add('hidden');
+      document.getElementById('progressBar').style.width = "0%";
+      document.querySelectorAll('.step-dot').forEach(el => el.parentElement.className = 'flex items-center gap-2.5 text-slate-400');
+      document.getElementById('userEcho').textContent = 'குரல் தயாராக உள்ளது (Tap mic to speak)';
+      const initial = isTanglish 
+        ? "Vanakkam Akka! Naan ungalukku arasu thittangalin thagudhiya check panna udhavuren. Keezhe ulla button-ai azhuthi pesavum."
+        : "வணக்கம் அக்கா! நான் உங்களுக்கு அரசு திட்டங்களின் தகுதியை சரிபார்க்க உதவுகிறேன். கீழே இருக்கும் ஆரஞ்சு பொத்தானை அழுத்திப் பேசுங்கள்.";
+      document.getElementById('assistantSpeech').textContent = initial;
+      speakOut(initial);
+    }
+
+    function speakOut(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ta-IN';
+        u.rate = 0.93;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    document.getElementById('micBtn').addEventListener('click', () => {
+      if (recognition) recognition.start();
+    });
+    document.getElementById('replayBtn').addEventListener('click', () => {
+      speakOut(document.getElementById('assistantSpeech').textContent);
+    });
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+    document.getElementById('langToggleBtn').addEventListener('click', () => {
+      isTanglish = !isTanglish;
+      document.getElementById('langToggleBtn').textContent = isTanglish ? "தமிழ் (Tamil)" : "English/Tanglish";
+      resetAll();
+    });
+
+    window.addEventListener('load', () => {
+      speakOut(document.getElementById('assistantSpeech').textContent);
+    });
+  </script>
+</body>
+</html>
